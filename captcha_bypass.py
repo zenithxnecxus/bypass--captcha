@@ -1,7 +1,4 @@
 #!/usr/bin/env python3
-# universal_captcha_bypass.py
-# CAPTCHA Bypass Tool - Auto detect & bypass
-
 import warnings
 import requests
 import re
@@ -60,9 +57,7 @@ class CaptchaBypass:
         return None
     
     def detect_login_form(self, html, base_url):
-        """Detect login form and extract fields"""
         soup = BeautifulSoup(html, 'html.parser')
-        
         forms = soup.find_all('form', method=lambda x: x and x.lower() == 'post')
         
         for form in forms:
@@ -70,7 +65,7 @@ class CaptchaBypass:
             if not action:
                 action = base_url
             
-]            fields = {}
+            fields = {}
             for inp in form.find_all('input'):
                 name = inp.get('name')
                 type_ = inp.get('type', 'text')
@@ -102,8 +97,8 @@ class CaptchaBypass:
         print(f"Target: {target_url}")
         print(f"{'-'*60}\n")
         
-      print("[1] Mengakses halaman")
-        try
+        print("[1] Mengakses halaman")
+        try:
             r = self.session.get(target_url, timeout=30)
         except Exception as e:
             print(f"[-] Gagal akses: {e}")
@@ -125,7 +120,6 @@ class CaptchaBypass:
             print("    [-] CAPTCHA tidak ditemukan!")
             return
         
-        
         print("\n[3] Mendeteksi form login...")
         form = self.detect_login_form(html, target_url)
         
@@ -137,25 +131,22 @@ class CaptchaBypass:
         print(f"    [+] Fields: {', '.join(form['fields'].keys())}")
         if form['captcha_field']:
             print(f"    [+] CAPTCHA Field: {form['captcha_field']}")
-        
-        
 
 def main():
     import argparse
     
     parser = argparse.ArgumentParser(
-        description=" CAPTCHA Bypass Scanner",
+        description="CAPTCHA Bypass Scanner",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python3 captcha_bypass.py -u example.com/sim-epk/auth/login/
-  python3 ucaptcha_bypass.py -u example.com/login-view
+  python3 captcha_bypass.py -u https://target.com/login
   python3 captcha_bypass.py -f targets.txt
         """
     )
     
     parser.add_argument("-u", "--url", help="Target URL")
-    parser.add_argument("-f", "--file", help="File with targets (one per line)")
+    parser.add_argument("-f", "--file", help="File with targets")
     
     args = parser.parse_args()
     
